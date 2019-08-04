@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang = "en">
+<head>
+  <meta charset = "utf-8">
+  <meta name = "description" content = "Website">
+  <meta name = "viewport" content = "width = device-width, initial-scale = 1">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+  <title>Tazzil | Purchases</title>
+  <style>
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 5vh;
+    font-family: "Comfortaa";
+    display: grid;
+    text-align: center;
+    align-content: center;
+    animation: fadeinDown 1s cubic-bezier(.5,1,.5,1) forwards;
+  }
+
+  .hero {
+    display: grid;
+    font-size: 5em;
+    color: white;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(pink, rgb(290, 95, 33));
+    background-size: 150% 150%;
+    animation: fadeinDown 2s;
+    animation: gradient 10s ease infinite;
+    text-align: center;
+    align-content: center;
+  }
+
+  .site-nav {
+    margin: 3vh;
+    animation: fadeinUp 2s;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+    margin: 10px;
+    display: inline-block;
+  }
+
+  a:hover {
+    animation: moveUp 1s;
+    color: gray;
+  }
+
+  .logo {
+    font-size: 5vh;
+    animation: fadeinDown 2s;
+  }
+
+  section {
+    min-height: 50vh;
+    border-radius: 10px;
+    margin: 3vh auto;
+    float: left;
+    width: 50%;
+  }
+
+  .nav-footer {
+    margin: 3vh;
+    padding: 3vh;
+    border-top: 1px solid lightgray;
+  }
+
+  @media screen and (max-width: 1000vh) {
+      section {
+        width: 100%;
+      }
+  }
+
+  @keyframes fadeinDown {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeinUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes moveUp {
+    from {
+      transform: translateY(0px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 50% 0%;
+    }
+
+    50% {
+      background-position: 50% 100%;
+    }
+
+    100% {
+      background-position: 50% 0%;
+    }
+  }
+
+  .container {
+    margin: 0 auto;
+    padding: 15px;
+    display: flex;
+    font-family: 'Comfortaa';
+    text-align: left;
+    border: 1px solid lightgray;
+    min-height: 30vh;
+    max-width: 1200px;
+    float: left;
+  }
+
+  .left-column {
+    width: 65%;
+    position: relative;
+    margin: 15px;
+  }
+
+  .right-column {
+    width: 35%;
+    margin-top: 60px;
+  }
+
+  .left-column img {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+  }
+
+  .product-description {
+    border-bottom: 1px solid gray;
+    margin-bottom: 20px;
+  }
+
+  .product-description span {
+    font-size: 12px;
+    color: darkgray;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .product-description h1 {
+    font-weight: 300;
+    font-size: 52px;
+    color: gray;
+    letter-spacing: -2px;
+  }
+
+  .product-description p {
+    font-size: 16px;
+    font-wight: 300px;
+    color: gray;
+    line-height: 24px;
+  }
+
+  .product-price {
+    display: flex;
+    align-items: center;
+  }
+
+  .product-price span {
+    font-size: 26px;
+    font-weight: 300;
+    color: gray;
+    margin-right: 20px;
+  }
+
+  .cart-btn {
+    display: inline-block;
+    background-color: purple;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 12px 30px;
+    transition: all .5s;
+  }
+
+  .cart-btn:hover {
+    background-color: gray;
+  }
+
+  @media (max-width: 940px) {
+    .container {
+      flex-direction: column;
+      margin-top: 60px;
+    }
+
+    .right-column {
+      width: 100%;
+      right: 0;
+      top: 100px;
+      left: initial;
+    }
+
+    .left-column img {
+      opacity: 0;
+    }
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <a href = "site.html" class = "logo">
+      <img class="logo-small" src="img/logo-small.svg" alt="Tazzil Logo" style="width: 6vh; height: auto;">
+    </a>
+    <div class = "site-nav">
+      <a href = "site.html">Home</a>
+      <a href = "#">Creations</a>
+      <a href = "#">Origins</a>
+      <a href = "products.html">Products</a>
+    </div>
+  </header>
+  <div class = "sections">
+    <section class = "hero">
+      <h3>Products</h3>
+    </section>
+    <section class = "container">
+      <div class = "left-column">
+        <img src = "https://picsum.photos/100/50" alt = "Random Image">
+      </div>
+      <div class = "right-column">
+        <div class = "product-description">
+          <span>Tazzil</span>
+          <span>Lorem</span>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class = "product-price">
+          <span>Price</span>
+          <a href = "#" class = "cart-btn">Add to cart</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer>
+    <div class = "nav-footer">
+      <a href = "site.html">Home</a>
+      <a href = "#">Creations</a>
+      <a href = "#">Origins</a>
+      <a href = "products.html">Products</a>
+    </div>
+  </footer>
+</body>
+</html>

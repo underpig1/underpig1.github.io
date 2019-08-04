@@ -1,0 +1,120 @@
+<link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+
+
+<section class = "container">
+  <div class = "left-column">
+    <img src = "https://picsum.photos/100/50" alt = "Random Image">
+  </div>
+  <div class = "right-column">
+    <div class = "product-description">
+      <span>Tazzil</span>
+      <span>Lorem</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div class = "product-price">
+      <span>Price</span>
+      <a href = "#" class = "cart-btn">Add to cart</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+    display: flex;
+    font-family: 'Comfortaa';
+  }
+
+  .left-column {
+    width: 65%;
+    position: relative;
+    margin: 15px;
+  }
+
+  .right-column {
+    width: 35%;
+    margin-top: 60px;
+  }
+
+  .left-column img {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+  }
+
+  .product-description {
+    border-bottom: 1px solid gray;
+    margin-bottom: 20px;
+  }
+
+  .product-description span {
+    font-size: 12px;
+    color: darkgray;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .product-description h1 {
+    font-weight: 300;
+    font-size: 52px;
+    color: gray;
+    letter-spacing: -2px;
+  }
+
+  .product-description p {
+    font-size: 16px;
+    font-wight: 300px;
+    color: gray;
+    line-height: 24px;
+  }
+
+  .product-price {
+    display: flex;
+    align-items: center;
+  }
+
+  .product-price span {
+    font-size: 26px;
+    font-weight: 300;
+    color: gray;
+    margin-right: 20px;
+  }
+
+  .cart-btn {
+    display: inline-block;
+    background-color: purple;
+    border-radius: 6px;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 12px 30px;
+    transition: all .5s;
+  }
+
+  .cart-btn:hover {
+    background-color: gray;
+  }
+
+  @media (max-width: 940px) {
+    .container {
+      flex-direction: column;
+      margin-top: 60px;
+    }
+
+    .left-column, .right-column {
+      width: 100%;
+    }
+
+    .left-column img {
+      width: 300px;
+      right: 0;
+      top: -65px;
+      left: initial;
+    }
+  }
+</style>
