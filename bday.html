@@ -81,6 +81,8 @@
       text-align: center;
       padding: 10px;
       border-radius: 10px;
+      animation-name: card;
+      animation-duration 5s;
     }
     
     .name {
@@ -114,13 +116,25 @@
       from {
         opacity: 0;
         transform: translateY(-150%);
-        skewX: 100deg;
+        transform: skewX(10deg);
       }
       
       to {
         opacity: 1;
         transform: translateY(0);
-        skewX: 0;
+        transform: skewX(0);
+      }
+    }
+    
+    @keyframes card {
+      from {
+        transform: scale(150%);
+        opacity: 0.5;
+      }
+      
+      to {
+        transform: scale(0);
+        opacity: 0;
       }
     }
   </style>
