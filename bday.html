@@ -90,7 +90,7 @@
       font-size: 22px;
     }
     
-    .card button {
+    .card a {
       border: none;
       outline: 0;
       padding: 12px;
@@ -106,9 +106,10 @@
     
     .card img {
       border-radius: 10px;
+      background-color: gray;
     }
     
-    .card button:hover {
+    .card a:hover {
       opacity: 0.7;
     }
     
@@ -116,13 +117,11 @@
       from {
         opacity: 0;
         transform: translateY(-150%);
-        transform: skewX(10deg);
       }
       
       to {
         opacity: 1;
         transform: translateY(0);
-        transform: skewX(0);
       }
     }
     
