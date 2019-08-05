@@ -70,7 +70,35 @@
     }
     
     .logo {
-      margin: 1vh;
+      margin: 5vh;
+    }
+    
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      margin: auto;
+      text-align: center;
+    }
+    
+    .name {
+      color: gray;
+      font-size: 22px;
+    }
+    
+    .card button {
+      border: none;
+      outline: 0;
+      padding: 12px;
+      color: white;
+      background-color: black;
+      text-align: center;
+      ccursor: pointer;
+      width: 100%;
+      font-size: 18px;
+    }
+    
+    .card button:hover {
+      opacity: 0.7;
     }
     
     @keyframes dropIn {
@@ -107,6 +135,15 @@
       <h3 class = "a">A</h2>
       <h3 class = "y">Y</h2>
       <h3 class = "!">!</h2>
+    </section>
+    <section class = "faces">
+      <div class = "card">
+        <img src = "" alt = "Face" style = "width: 100%;">
+        <h1><i>"Hello!"</i></h1>
+        <p class = "name">My Name!</p>
+        <p>Happy Birthday, Gamma!</p>
+        <p><button>It's Me!</button></p>
+      </div>
     </section>
   </div>
 </body>
