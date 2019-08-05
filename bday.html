@@ -22,6 +22,24 @@
       border-radius: 10%;
       font-weight: 0;
     }
+    
+    hero h2 {
+      opacity: 0;
+      animation: dropIn 2s;
+    }
+    
+    @keyframes dropIn {
+      from {
+        opacity: 0;
+        transform: translateY(150%);
+        skewX: 10deg;
+      }
+      
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        skewX: 0;
+      }
   </style>
 </head>
 <body>
