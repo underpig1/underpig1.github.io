@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name = "viewport">
+    <style>
+      canvas {
+        background-image: linear-gradient(lightblue, white);
+      }
+      h1 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+        color: black;
+        font-family: Futura;
+      }
+      h1:not(.o) {
+        animation-name: fall-in;
+        animation-duration: 5s;
+        animation-fill-mode: forwards;
+      }
+      .o {
+        animation: drop-in 0.5s infinite;
+      }
+      .data {
+        font-size: 25px;
+        color: black;
+        font-family: Futura;
+        margin: 0;
+        float: left;
+      }
+      p {
+        margin: 0;
+      }
+      table {
+        opacity: 0.1;
+        color: black;
+        font-family: Futura;
+        float: right;
+        border: 1px solid black;
+      }
+      table:hover {
+        opacity: 0.5;
+      }
+      td {
+        padding: 1px;
+        cursor: pointer;
+      }
+      tr {
+        opacity: 0.5;
+      }
+      tr:hover {
+        opacity: 1;
+      }
+      @keyframes fall-in {
+        0% {
+          transform:
+            translateY(-500%)
+            rotateZ(10deg)
+            scale(5);
+          opacity: 0;
+        }
+        30% {
+          transform:
+            translateY(0)
+            rotateZ(0deg)
+            scale(1);
+          opacity: 1;
+        }
+        70% {
+          transform:
+            translateY(0)
+            rotateZ(0deg)
+            scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform:
+            translateY(700%)
+            scale(1);
+          opacity: 0;
+        }
+      }
+      @keyframes drop-in {
+        0% {
+          color: red;
+        }
+        50% {
+          color: green;
+        }
+        100% {
+          color: red;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id = "canvas" onmousedown = "summonOrnament(event)" onmouseup = "releaseOrnament(event)"></canvas>
+    <div class = "data">
+      <p>SN<span class = "o">O</span>WMEN: <span id = "snowmenCount">10</span></p>
+      <p><span class = "o">O</span>RNAMENTS: <span id = "ornamentsCount">100</span></p>
+      <p>SN<span class = "o">O</span>WBALLS: <span id = "snowballCount"></p>
+    </div>
+    <table class = "shop">
+      <tr onclick = "purchaseOrnament(0, 0)">
+        <td>Snow</td>
+        <td>0 <span class = "o">O</span></td>
+        <td>Regular snowballs.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(1, 10)">
+        <td>Explosive Shrapnel</td>
+        <td>10 <span class = "o">O</span></td>
+        <td>Regular snowballs. With more snowballs.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(2, 20)">
+        <td>Snowstorm</td>
+        <td>20 <span class = "o">O</span></td>
+        <td>It's snowing!</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(3, 50)">
+        <td>Giant Snowball</td>
+        <td>50 <span class = "o">O</span></td>
+        <td>Large and bouncy!</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(4, 0)">
+        <td>Snow</td>
+        <td>0 <span class = "o">O</span></td>
+        <td>Regular snowballs.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(5, 40)">
+        <td>Aerodynamic Snow</td>
+        <td>40 <span class = "o">O</span></td>
+        <td>Extremely fast.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(6, 300)">
+        <td>Homing Snow</td>
+        <td>300 <span class = "o">O</span></td>
+        <td>Teleports to snowmen.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(7, 350)">
+        <td>Layered Snow</td>
+        <td>350 <span class = "o">O</span></td>
+        <td>Casts explosive layers of snow.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(8, 400)">
+        <td>Volcanic Snow</td>
+        <td>400 <span class = "o">O</span></td>
+        <td>Summons snowy volcanoes.</td>
+      </tr>
+      <tr onclick = "purchaseOrnament(9, 500)">
+        <td>Blizzard</td>
+        <td>500 <span class = "o">O</span></td>
+        <td>Summons a blinding blizzard.</td>
+      </tr>
+    </table>
+    <h1>SN<span class = "o">O</span>WBALL</h1>
+    <audio autoplay loop>
+      <source src="jingle_bells.mp3" type = "audio/mpeg">
+    </audio>
+    <script>
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      const width = window.innerWidth;
+      const g = 9.8;
+      var ornaments = [[100, 100, 1, 10, 50, 0, 0, 0]];
+      var scrollX = 0;
+      var aim = [];
+      var snowmen = [[100, 600, 10]];
+      var mousePos = [0, 0];
+      var scroll = true;
+      var coins = 100;
+      const snowmenMultiplier = 100;
+      var classOrnament = 0;
+      var ornamentCount = 0;
+      canvas.width = width;
+      canvas.height = 700;
+
+      for (var i = 0; i <= snowmenMultiplier; i++) {
+        summonSnowman();
+      }
+      snowmen.push([50450, 225, -10])
+
+      setInterval(updateAll, 0);
+
+      function updateAll() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        updateGraphics();
+        updateOrnaments();
+        updateAim();
+        updateSnowmen();
+        updateScroll();
+        updateCollisions();
+        getCollisions();
+        updateCount();
+        setInterval(function() {console.log();}, 0);
+      }
+
+      function updateScroll() {
+        if (ornaments.length > 0) {
+          for (var i = 0; i < ornaments.length; i++) {
+            if (ornaments.length > 0 && ornaments[i][6] == 0 && ornaments[i][0] > width/2) {
+              scrollX = -ornaments[i][0] + width/2;
+            }
+          }
+        }
+        if (!scroll) {
+          scrollX = 0;
+        }
+        if (ornaments.length == 0) {
+          scroll = false;
+        }
+      }
+
+      function purchaseOrnament(id, cost) {
+        if (coins >= cost) {
+          coins -= cost;
+          if (classOrnament != id) {
+            classOrnament = id;
+            ornamentCount = 1;
+          } else {
+            ornamentCount += 1;
+          }
+        }
+      }
+
+      function updateCount() {
+        var ornamentClasses = {0: "Snow", 1: "Explosive Shrapnel", 2: "Snowstorm", 3: "Giant Snowball", 4: "Snow", 5: "Aerodynamic Snow", 6: "Homing Snow", 7: "Layered Snow", 8: "Volcanic Snow", 9: "Blizzard"};
+        document.getElementById("snowmenCount").innerHTML = String(snowmen.length);
+        document.getElementById("ornamentsCount").innerHTML = String(coins);
+        document.getElementById("snowballCount").innerHTML = String(ornamentCount) + " " + String(ornamentClasses[classOrnament]) + "s";
+        if (snowmen.length == 0) {
+          for (var i = 0; i <= 100; i++) {
+            addOrnament(Math.random()*width, 0, (Math.random() - 0.5)*(width/5), 0, (Math.random() + 1)*5, 1, 4);
+          }
+          coins += 1;
+        }
+      }
+
+      function updateGraphics() {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 650, width, 700);
+        ctx.beginPath();
+        ctx.moveTo(scrollX, 650);
+        ctx.lineTo(width/5 + scrollX, 600);
+        ctx.lineTo(width/4 + scrollX, 650);
+        ctx.lineTo(width/3 + scrollX, 550);
+        ctx.lineTo(width/2 + scrollX, 650);
+        ctx.lineTo(width - width/2.5 + scrollX, 600);
+        ctx.lineTo(width - width/3 + scrollX, 650);
+        ctx.lineTo(width - width/5 + scrollX, 590);
+        ctx.lineTo(width + scrollX, 650);
+        ctx.lineTo(width*1.25 + scrollX, 650);
+        ctx.lineTo(width*1.5 + scrollX, 590);
+        ctx.lineTo(width*1.75 + scrollX, 650);
+        ctx.lineTo(width*1.95 + scrollX, 600);
+        ctx.lineTo(width*2 + scrollX, 650);
+        ctx.lineTo(width*2.25 + scrollX, 550);
+        ctx.lineTo(width*2.5 + scrollX, 650);
+        ctx.lineTo(width*2.55 + scrollX, 590);
+        ctx.lineTo(width*2.65 + scrollX, 650);
+        ctx.moveTo(50000 + scrollX, 650);
+        ctx.lineTo(50050 + scrollX, 550);
+        ctx.lineTo(50150 + scrollX, 600);
+        ctx.lineTo(50250 + scrollX, 300);
+        ctx.lineTo(50300 + scrollX, 225);
+        ctx.lineTo(50550 + scrollX, 250);
+        ctx.lineTo(50600 + scrollX, 550);
+        ctx.lineTo(50700 + scrollX, 450);
+        ctx.lineTo(50850 + scrollX, 600);
+        ctx.lineTo(50950 + scrollX, 650);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function addOrnament(x, y, initX, initY, size, child, classes) {
+        ornaments.push([x, y, initX, size, initY, 0, child, classes]);
+      }
+
+      function removeOrnament(i) {
+        ornaments.splice(i, 1);
+      }
+
+      function updateOrnaments() {
+        for (var i = 0; i < ornaments.length; i++) {
+          // [x, y, xvel, r, inityvel, tick, child?, class]
+          ctx.fillStyle = "white";
+          ctx.beginPath();
+          ctx.arc(ornaments[i][0] + scrollX, ornaments[i][1], ornaments[i][3], 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          const scale = 1000;
+          if (ornaments[i][7] == 5) {
+            ornaments[i] = [ornaments[i][0] + ornaments[i][2]*10, (ornaments[i][1] + (ornaments[i][5]*g/scale/10)), ornaments[i][2], ornaments[i][3], ornaments[i][4], ornaments[i][5] + 1, ornaments[i][6], ornaments[i][7]];
+          } else {
+            if (ornaments[i][4] - ornaments[i][5] >= 0) {
+              ornaments[i] = [ornaments[i][0] + ornaments[i][2], ((ornaments[i][1] + (ornaments[i][5]*g/scale) - (ornaments[i][4] - ornaments[i][5])*g/scale)), ornaments[i][2], ornaments[i][3], ornaments[i][4], ornaments[i][5] + 1, ornaments[i][6], ornaments[i][7]];
+            } else {
+              ornaments[i] = [ornaments[i][0] + ornaments[i][2], (ornaments[i][1] + (ornaments[i][5]*g/scale)), ornaments[i][2], ornaments[i][3], ornaments[i][4], ornaments[i][5] + 1, ornaments[i][6], ornaments[i][7]];
+            }
+          }
+          if (ornaments[i][1] >= 700) {
+            if (ornaments[i][6] == 0 || ornaments[i][6] == 3) {
+              if (ornaments[i][7] == 0 || ornaments[i][7] == 5) {
+                for (var x = -5; x <= 5; x++) {
+                  addOrnament(ornaments[i][0], 590, x/3, (5 - (Math.abs(x)))*ornaments[i][3]*10, (Math.random() + 1)*5, 1, 0);
+                }
+              }
+              if (ornaments[i][7] == 1) {
+                for (var x = -10; x <= 10; x += 0.1) {
+                  addOrnament(ornaments[i][0], 590, x/3, (5 - (Math.abs(x)))*500, (Math.random() + 1)*5, 2, 0);
+                }
+              }
+              if (ornaments[i][7] == 2) {
+                for (var x = -10; x <= 10; x += 0.1) {
+                  addOrnament(ornaments[i][0], 590, x/10, (5 - (Math.abs(x)))*500, (Math.random() + 1)*5, 3, 0);
+                }
+              }
+              if (ornaments[i][7] == 3) {
+                addOrnament(ornaments[i][0], 590, 1, 500, 300, 0, 4);
+              }
+              if (ornaments[i][7] == 4) {
+                if (ornaments[i][3] >= 0.1) {
+                  addOrnament(ornaments[i][0], 690, ornaments[i][2]/3*2, ornaments[i][4]/3*2, ornaments[i][3]/3*2, 0, 4);
+                }
+              }
+              if (ornaments[i][7] == 6) {
+                var tick = 0;
+                for (var i = 0; i < snowmen.length; i++) {
+                  ornaments[i][0] = snowmen[i][0], ornaments[i][1] = snowmen[i][1];
+                  tick++;
+                }
+              }
+              if (ornaments[i][7] == 7) {
+                for (var x = ornaments[i][0] - width; x <= ornaments[i][0] + width/2; x += 5) {
+                  addOrnament(x, 0, 0, (5 - (Math.abs(x)))*500, (Math.random() + 1)*5, 3, 0);
+                }
+              }
+              if (ornaments[i][7] == 8) {
+                for (var x = -10; x <= 10; x += 0.1) {
+                  addOrnament(ornaments[i][0] + x*10, (Math.random() + 1)*500, 0, (5 - (Math.abs(x)))*500, (Math.random() + 1)*5, 0, 5);
+                }
+              }
+              if (ornaments[i][7] == 9) {
+                for (var x = -5; x <= 5; x++) {
+                  addOrnament(ornaments[i][0], 590, x/3, (5 - (Math.abs(x)))*ornaments[i][3]*5, (Math.random() + 1)*5, 0, 0);
+                }
+                for (var x = -10; x <= 10; x += 0.1) {
+                  addOrnament(ornaments[i][0] + x*1000, Math.random()*50, 1, 0, (Math.random() + 1)*5, 2, 5);
+                }
+              }
+            }
+            removeOrnament(i);
+          }
+        }
+      }
+
+      function updateCollisions() {
+        if (typeof getCollisions() !== "undefined") {
+          var collisions = getCollisions();
+          coins += 10;
+          for (var x = -5; x <= 5; x++) {
+            addOrnament(snowmen[collisions[1]][0], 590, x, (5 - (Math.abs(x)))*500, (Math.random() + 1)*5, 1, 0);
+          }
+          removeSnowman(collisions[1]);
+        }
+      }
+
+      function summonOrnament(event) {
+        scrollX = 0;
+        var rect = canvas.getBoundingClientRect();
+        aim.push([event.clientX - rect.left, event.clientY - rect.top]);
+        scroll = false;
+      }
+
+      function releaseOrnament(event) {
+        var rect = canvas.getBoundingClientRect();
+        aim.push([event.clientX - rect.left, event.clientY - rect.top]);
+        scroll = true;
+      }
+
+      function updateAim() {
+        if (aim.length >= 2 && ornamentCount > 0) {
+          addOrnament(aim[0][0], aim[0][1], (aim[1][0] - aim[0][0])/100, aim[0][1] - aim[1][1], 10, 0, classOrnament);
+          ornamentCount -= 1;
+          aim = [];
+          scroll = true;
+        }
+        if (ornamentCount <= 0){
+          aim = [];
+        }
+        for (var i = 0; i < aim.length; i++) {
+          var rect = canvas.getBoundingClientRect();
+          ctx.fillStyle = "lightgray";
+          ctx.beginPath();
+          ctx.arc(aim[i][0] + scrollX, aim[i][1], 10, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = "gray";
+          ctx.beginPath();
+          ctx.arc(aim[i][0] + scrollX, aim[i][1], 5, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      function getCollisions() {
+        var bboxOrnament = [];
+        var bboxSnowman = [];
+        for (var i = 0; i < ornaments.length; i++) {
+          if (ornaments[i][6] != 1) {
+            bboxOrnament.push([ornaments[i][0] - ornaments[i][3], ornaments[i][1] - ornaments[i][3], ornaments[i][0] + ornaments[i][3], ornaments[i][1] + ornaments[i][3]]);
+          }
+        }
+        for (var i = 0; i < snowmen.length; i++) {
+          bboxSnowman.push([snowmen[i][0] - 50, snowmen[i][1] + 50, snowmen[i][0] + snowmen[i][2]/2 + 50, snowmen[i][1] - 125]);
+        }
+        for (var i = 0; i < bboxOrnament.length; i++) {
+          for (var x = 0; x < bboxSnowman.length; x++) {
+            if ((bboxOrnament[i][0] < bboxSnowman[x][2]) && (bboxOrnament[i][2] > bboxSnowman[x][0]) && (bboxOrnament[i][1] > bboxSnowman[x][3]) && (bboxOrnament[i][3] < bboxSnowman[x][1])) {
+              return [i, x];
+            }
+          }
+        }
+      }
+
+      function getMousePos(event) {
+        var rect = canvas.getBoundingClientRect();
+        return [event.clientX - rect.left, event.clientY - rect.top];
+      }
+
+      function summonSnowman() {
+        snowmen.push([Math.random()*500*snowmenMultiplier, 650, Math.random()*10 - 5])
+      }
+
+      function removeSnowman(i) {
+        snowmen.splice(i, 1);
+      }
+
+      function updateSnowmen() {
+        for (var i = 0; i < snowmen.length; i++) {
+          // [x, y, rot]
+          ctx.fillStyle = "white";
+          ctx.beginPath();
+          ctx.arc(snowmen[i][0] + scrollX, snowmen[i][1], 50, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(snowmen[i][0] + snowmen[i][2]/2 + scrollX, snowmen[i][1] - 60, 40, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(snowmen[i][0] + snowmen[i][2] + scrollX, snowmen[i][1] - 110, 30, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      canvas.addEventListener("mousemove", function(event) {
+        mousePos = getMousePos(event);
+      })
+
+      window.addEventListener('keydown', function(e) {
+        var audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        var key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        audio.playbackRate = 2;
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play();
+        key.classList.add('active')
+      });
+    </script>
+  </body>
+<html>
