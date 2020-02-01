@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Comfortaa";
+    }
+
+    section {
+      padding: 1vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50vh;
+    }
+
+    .parallax-wrapper {
+      width: 100%;
+      min-height: 50vh;
+      position: relative;
+      transform: scale(1);
+      transition: transform 0.3s;
+    }
+
+    .parallax-wrapper:hover {
+      width: 100%;
+      min-height: 50vh;
+      position: relative;
+      transform: scale(0.95);
+    }
+
+    .parallax {
+      text-align: center;
+      width: 100%;
+      height: 50vh;
+      padding: 2em;
+      background-color: gray;
+      color: white;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background-image: url(https://picsum.photos/1500/1500);
+    }
+
+    header {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-transform: lowercase;
+      letter-spacing: 1.5rem;
+      margin: 5vh;
+    }
+
+    .underline {
+      text-decoration: underline;
+    }
+
+    h2 {
+      display: inline-block;
+      animation: fade-in 1s;
+    }
+
+    p {
+      display: inline-block;
+      opacity: 0;
+      animation: fade-in 1s 0.3s forwards;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: scale(0.1);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>underpig</h1>
+  </header>
+  <section>
+    <h1 class = "underline">work</h1>
+    <div class = "parallax-wrapper">
+      <div class = "parallax-child">
+      </div>
+      <div class = "parallax">
+        <h2>Create</h2>
+        <p>Paint a picture.</p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class = "parallax-wrapper">
+      <div class = "parallax-child">
+      </div>
+      <div class = "parallax">
+        <h2>Develop</h2>
+        <p>Make your easel.</p>
+      </div>
+    </div>
+    <h1 class = "underline">products</h1>
+  </section>
+  <section>
+    <h1 class = "underline">contact</h1>
+    <div class = "parallax-wrapper">
+      <div class = "parallax-child">
+      </div>
+      <div class = "parallax">
+        <h2>Deploy</h2>
+        <p>Send your message.</p>
+      </div>
+    </div>
+  </section>
+  <script>
+    var string = "Underpig";
+    var array = string.split("");
+    var timer;
+
+    function frame () {
+      if (array.length > 0) {
+        document.getElementById("text").innerHTML += array.shift();
+      } else {
+        clearTimeout(timer);
+      }
+      loopTimer = setTimeout('frame()', 100);
+    }
+    frame();
+  </script>
+</body>
+</html>

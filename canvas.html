@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    canvas {
+      position: absolute;
+      transform-style: preserve-3d;
+      top: 10vh;
+    }
+
+    .canvas {
+      perspective: 1000px;
+    }
+
+    header {
+      overflow: hidden;
+      padding-right: 2vh;
+      padding-left: 2vh;
+      background: lightgray;
+      text-align: center;
+      align-items: center;
+    }
+
+    .left {
+      font-family: Helvetica;
+      font-size: 2vh;
+      float: left;
+      font-weight: lighter;
+    }
+
+    .right {
+      font-family: Helvetica;
+      font-size: 2vh;
+      float: right;
+      font-weight: lighter;
+    }
+
+    .color {
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      border: 2px solid lightgray;
+      top: 50%;
+      background-color: white;
+      transition: border-radius 0.3s;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .tool {
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      border: 2px solid lightgray;
+      top: 50%;
+      background-color: white;
+      transition: border-radius 0.3s;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .tool:hover {
+      border-radius: 10%;
+    }
+
+    .color:hover {
+      border-radius: 10%;
+    }
+
+    .colors {
+       margin: 5px;
+    }
+
+    .red { background-color: red; }
+    .blue { background-color: blue; }
+    .green { background-color: green; }
+    .orange { background-color: orange; }
+    .purple { background-color: purple; }
+    .yellow { background-color: yellow; }
+    .black { background-color: black; }
+    .white { background-color: white; }
+
+    form input {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 5px;
+      background: lightgray;
+      outline: none;
+      opacity: 0.5;
+      transition: opacity .3s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      background: gray;
+      cursor: pointer;
+      transition: border-radius 0.3s;
+    }
+
+    .slider::-webkit-slider-thumb:hover  {
+      border-radius: 10%;
+    }
+
+    .slider:hover {
+      opacity: 1;
+    }
+
+    div h1 {
+      font-family: Helvetica;
+      font-size: 1vh;
+      float: left;
+      font-weight: lighter;
+    }
+
+    .toolbar {
+      overflow: hidden;
+      min-height: 6vh;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tip {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(5px);
+      font-size: 1vh;
+    }
+
+    .tooltip .tip::after {
+      content: " ";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent black transparent;
+    }
+
+    .tooltip:hover .tip {
+      visibility: visible;
+      opacity: 0.5;
+      transform: translateY(0);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 20px;
+      width: 547px;
+    }
+
+    .close {
+      color: black;
+      float: right;
+      font-size: 28px;
+      opacity: 0.5;
+      font-weight: bold;
+    }
+
+    .close:hover {
+      opacity: 1;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    div div div h1 {
+      font-size: 2vh;
+      float: none;
+    }
+
+    .modal-label {
+      font-size: 1vh;
+      float: left;
+    }
+
+    .column {
+      float: left;
+      width: 50%;
+    }
+
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .modal-content button {
+      background-color: salmon;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+    }
+
+    .modal-content button:hover {
+      opacity: 1;
+    }
+
+    .rearrange-slider {
+      display: none;
+      position: absolute;
+      padding: 1vh;
+      width: 100%;
+    }
+
+    .background-image {
+      display: none;
+      position: absolute;
+      height: 500px;
+      width: 100%;
+      z-index: -1;
+      top: 5vh;
+    }
+
+    #background-image {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class = "left">New Drawing</h1>
+    <h1 class = "right">Canvas Carousel</h1>
+  </header>
+  <div class = "toolbar">
+    <form class = "right colors">
+      <input value = "red" type = "radio" name = "colors" checked><span class = "color red"></span></input>
+      <input value = "blue" type = "radio" name = "colors"><span class = "color blue"></span></input>
+      <input value = "green" type = "radio" name = "colors"><span class = "color green"></span></input>
+      <input value = "orange" type = "radio" name = "colors"><span class = "color orange"></span></input>
+      <input value = "purple" type = "radio" name = "colors"><span class = "color purple"></span></input>
+      <input value = "yellow" type = "radio" name = "colors"><span class = "color yellow"></span></input>
+      <input value = "black" type = "radio" name = "colors"><span class = "color black"></span></input>
+      <input value = "white" type = "radio" name = "colors"><span class = "color white"></span></input>
+      <input class = "selection_radio" value = "selection" type = "radio" name = "colors"><input type = "color" onfocus = "document.getElementsByClassName('selection_radio')[0].checked = true" id = "selection"></input><span class = "color selection"></span></input>
+    </form>
+    <div class = "left" style = "margin: 5px;">
+      <h1>Thickness: </h1>
+      <input type = "range" min = "1" max = "100" value = "2" class = "slider" id = "thickness">
+    </div>
+    <div class = "left tools" style = "margin: 5px;">
+      <div class = "tooltip" onclick = "drawVarChange()"><span class = "tool draw"></span><span class = "tip draw">Draw</span></div>
+      <div class = "tooltip" onclick = "setOrigin()"><span class = "tool origin"></span><span class = "tip origin">Set Origin</span></div>
+      <div class = "tooltip"><span class = "tool particles"></span><span class = "tip particles">Particle System</span></div>
+      <div class = "tooltip" onclick = "transparency()"><span class = "tool transparency"></span><span class = "tip transparency">Transparency</span></div>
+      <div class = "tooltip" onclick = "rearrange()" orient = "vertical"><span class = "tool rearrange"></span><span class = "tip rearrange">Rearrange</span></div>
+      <div class = "tooltip"><span class = "tool background"></span><span class = "tip background">Background</span></div>
+    </div>
+    <div id = "particle-modal" class = "modal">
+      <div class = "modal-content">
+        <span class = "close">&times;</span>
+        <h1>Particle System</h1>
+        <div class = "row">
+          <div class = "column" onmousemove = "refreshPreview()">
+            <div style = "display: grid;"><h1 class = "modal-label">Spread: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "spread"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Length: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "length"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Distribution: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "distribution"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Origin: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "origin"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Size: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "size"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Gravity: </h1><input type = "range" min = "1" max = "100" value = "50" class = "slider" id = "gravity"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Color: </h1><input style = "width: 100px; cursor: pointer;" type = "color" id = "color"></input></div>
+            <div style = "display: grid;"><h1 class = "modal-label">Title: </h1><input style = "width: 100px; cursor: pointer;" id = "title"></input></div>
+          </div>
+          <div class = "column">
+            <div style = "display: grid;"><h1 class = "modal-label">Preview: </h1></div><canvas style = "position: relative; width: 75%; height: 75%; left: 0; top: 0;" id = "preview"></canvas>
+          </div>
+        </div>
+        <button type = "button" class = "save">Save</button>
+      </div>
+    </div>
+    <div id = "background-modal" class = "modal">
+      <div class = "modal-content">
+        <span class = "close">&times;</span>
+        <h1>Background</h1>
+          <div style = "display: grid;"><h1 class = "modal-label">Image: </h1><input type = "file" accept = "image/gif, image/jpeg, image/png" onchange = "document.getElementById('background').src = window.URL.createObjectURL(this.files[0]); document.getElementsByClassName('background-image')[0].style.display = 'block';"></input></div>
+        <button type = "button" class = "save-background">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class = "canvas">
+    <div class = "background-image">
+      <img id = "background" alt = "Selected Image">
+    </div>
+    <canvas id = "rot0"></canvas>
+    <canvas id = "rot1"></canvas>
+    <canvas id = "rot2"></canvas>
+    <canvas id = "rot3"></canvas>
+    <canvas id = "rot4"></canvas>
+    <canvas id = "rot5"></canvas>
+    <canvas id = "rot6"></canvas>
+    <canvas id = "rot7"></canvas>
+    <canvas id = "rot8"></canvas>
+    <canvas id = "rot9"></canvas>
+    <canvas id = "rot10"></canvas>
+    <canvas id = "rot11"></canvas>
+    <canvas id = "rot12"></canvas>
+    <canvas id = "rot13"></canvas>
+    <canvas id = "rot14"></canvas>
+    <canvas id = "rot15"></canvas>
+    <canvas id = "rot16"></canvas>
+    <canvas id = "rot17"></canvas>
+    <canvas id = "rot18"></canvas>
+    <canvas id = "rot19"></canvas>
+    <canvas id = "rot20"></canvas>
+    <canvas id = "rot21"></canvas>
+    <canvas id = "rot22"></canvas>
+    <canvas id = "rot23"></canvas>
+    <canvas id = "rot24"></canvas>
+    <canvas id = "rot25"></canvas>
+    <canvas id = "rot26"></canvas>
+    <canvas id = "rot27"></canvas>
+    <canvas id = "rot28"></canvas>
+    <canvas id = "rot29"></canvas>
+    <canvas id = "rot30"></canvas>
+    <canvas id = "rot31"></canvas>
+    <canvas id = "rot32"></canvas>
+    <canvas id = "rot33"></canvas>
+    <canvas id = "rot34"></canvas>
+    <canvas id = "rot35"></canvas>
+    <canvas id = "rot36"></canvas>
+    <canvas id = "rot37"></canvas>
+    <canvas id = "rot38"></canvas>
+    <canvas id = "rot39"></canvas>
+    <canvas id = "rot40"></canvas>
+    <canvas id = "rot41"></canvas>
+    <canvas id = "rot42"></canvas>
+    <canvas id = "rot43"></canvas>
+    <canvas id = "rot44"></canvas>
+    <canvas id = "rot45"></canvas>
+    <canvas id = "rot46"></canvas>
+    <canvas id = "rot47"></canvas>
+    <canvas id = "rot48"></canvas>
+    <canvas id = "rot49"></canvas>
+    <canvas id = "rot50"></canvas>
+    <canvas id = "rot51"></canvas>
+    <canvas id = "rot52"></canvas>
+    <canvas id = "rot53"></canvas>
+    <canvas id = "rot54"></canvas>
+    <canvas id = "rot55"></canvas>
+    <canvas id = "rot56"></canvas>
+    <canvas id = "rot57"></canvas>
+    <canvas id = "rot58"></canvas>
+    <canvas id = "rot59"></canvas>
+    <canvas id = "rot60"></canvas>
+    <canvas id = "rot61"></canvas>
+    <canvas id = "rot62"></canvas>
+    <canvas id = "rot63"></canvas>
+    <canvas id = "rot64"></canvas>
+    <canvas id = "rot65"></canvas>
+    <canvas id = "rot66"></canvas>
+    <canvas id = "rot67"></canvas>
+    <canvas id = "rot68"></canvas>
+    <canvas id = "rot69"></canvas>
+    <canvas id = "rot70"></canvas>
+    <canvas id = "rot71"></canvas>
+    <canvas id = "rot72"></canvas>
+    <canvas id = "rot73"></canvas>
+    <canvas id = "rot74"></canvas>
+    <canvas id = "rot75"></canvas>
+    <canvas id = "rot76"></canvas>
+    <canvas id = "rot77"></canvas>
+    <canvas id = "rot78"></canvas>
+    <canvas id = "rot79"></canvas>
+    <canvas id = "rot80"></canvas>
+    <canvas id = "rot81"></canvas>
+    <canvas id = "rot82"></canvas>
+    <canvas id = "rot83"></canvas>
+    <canvas id = "rot84"></canvas>
+    <canvas id = "rot85"></canvas>
+    <canvas id = "rot86"></canvas>
+    <canvas id = "rot87"></canvas>
+    <canvas id = "rot88"></canvas>
+    <canvas id = "rot89"></canvas>
+    <canvas id = "rot90"></canvas>
+    <canvas id = "rot91"></canvas>
+    <canvas id = "rot92"></canvas>
+    <canvas id = "rot93"></canvas>
+    <canvas id = "rot94"></canvas>
+    <canvas id = "rot95"></canvas>
+    <canvas id = "rot96"></canvas>
+    <canvas id = "rot97"></canvas>
+    <canvas id = "rot98"></canvas>
+    <canvas id = "rot99"></canvas>
+    <canvas id = "rot100"></canvas>
+    <canvas id = "rot101"></canvas>
+    <canvas id = "rot102"></canvas>
+    <canvas id = "rot103"></canvas>
+    <canvas id = "rot104"></canvas>
+    <canvas id = "rot105"></canvas>
+    <canvas id = "rot106"></canvas>
+    <canvas id = "rot107"></canvas>
+    <canvas id = "rot108"></canvas>
+    <canvas id = "rot109"></canvas>
+    <canvas id = "rot110"></canvas>
+    <canvas id = "rot111"></canvas>
+    <canvas id = "rot112"></canvas>
+    <canvas id = "rot113"></canvas>
+    <canvas id = "rot114"></canvas>
+    <canvas id = "rot115"></canvas>
+    <canvas id = "rot116"></canvas>
+    <canvas id = "rot117"></canvas>
+    <canvas id = "rot118"></canvas>
+    <canvas id = "rot119"></canvas>
+    <canvas id = "rot120"></canvas>
+    <canvas id = "rot121"></canvas>
+    <canvas id = "rot122"></canvas>
+    <canvas id = "rot123"></canvas>
+    <canvas id = "rot124"></canvas>
+    <canvas id = "rot125"></canvas>
+    <canvas id = "rot126"></canvas>
+    <canvas id = "rot127"></canvas>
+    <canvas id = "rot128"></canvas>
+    <canvas id = "rot129"></canvas>
+    <canvas id = "rot130"></canvas>
+    <canvas id = "rot131"></canvas>
+    <canvas id = "rot132"></canvas>
+    <canvas id = "rot133"></canvas>
+    <canvas id = "rot134"></canvas>
+    <canvas id = "rot135"></canvas>
+    <canvas id = "rot136"></canvas>
+    <canvas id = "rot137"></canvas>
+    <canvas id = "rot138"></canvas>
+    <canvas id = "rot139"></canvas>
+    <canvas id = "rot140"></canvas>
+    <canvas id = "rot141"></canvas>
+    <canvas id = "rot142"></canvas>
+    <canvas id = "rot143"></canvas>
+    <canvas id = "rot144"></canvas>
+    <canvas id = "rot145"></canvas>
+    <canvas id = "rot146"></canvas>
+    <canvas id = "rot147"></canvas>
+    <canvas id = "rot148"></canvas>
+    <canvas id = "rot149"></canvas>
+    <canvas id = "rot150"></canvas>
+    <canvas id = "rot151"></canvas>
+    <canvas id = "rot152"></canvas>
+    <canvas id = "rot153"></canvas>
+    <canvas id = "rot154"></canvas>
+    <canvas id = "rot155"></canvas>
+    <canvas id = "rot156"></canvas>
+    <canvas id = "rot157"></canvas>
+    <canvas id = "rot158"></canvas>
+    <canvas id = "rot159"></canvas>
+    <canvas id = "rot160"></canvas>
+    <canvas id = "rot161"></canvas>
+    <canvas id = "rot162"></canvas>
+    <canvas id = "rot163"></canvas>
+    <canvas id = "rot164"></canvas>
+    <canvas id = "rot165"></canvas>
+    <canvas id = "rot166"></canvas>
+    <canvas id = "rot167"></canvas>
+    <canvas id = "rot168"></canvas>
+    <canvas id = "rot169"></canvas>
+    <canvas id = "rot170"></canvas>
+    <canvas id = "rot171"></canvas>
+    <canvas id = "rot172"></canvas>
+    <canvas id = "rot173"></canvas>
+    <canvas id = "rot174"></canvas>
+    <canvas id = "rot175"></canvas>
+    <canvas id = "rot176"></canvas>
+    <canvas id = "rot177"></canvas>
+    <canvas id = "rot178"></canvas>
+    <canvas id = "rot179"></canvas>
+    <canvas id = "rot180"></canvas>
+    <canvas id = "rot181"></canvas>
+    <canvas id = "rot182"></canvas>
+    <canvas id = "rot183"></canvas>
+    <canvas id = "rot184"></canvas>
+    <canvas id = "rot185"></canvas>
+    <canvas id = "rot186"></canvas>
+    <canvas id = "rot187"></canvas>
+    <canvas id = "rot188"></canvas>
+    <canvas id = "rot189"></canvas>
+    <canvas id = "rot190"></canvas>
+    <canvas id = "rot191"></canvas>
+    <canvas id = "rot192"></canvas>
+    <canvas id = "rot193"></canvas>
+    <canvas id = "rot194"></canvas>
+    <canvas id = "rot195"></canvas>
+    <canvas id = "rot196"></canvas>
+    <canvas id = "rot197"></canvas>
+    <canvas id = "rot198"></canvas>
+    <canvas id = "rot199"></canvas>
+    <canvas id = "rot200"></canvas>
+    <canvas id = "rot201"></canvas>
+    <canvas id = "rot202"></canvas>
+    <canvas id = "rot203"></canvas>
+    <canvas id = "rot204"></canvas>
+    <canvas id = "rot205"></canvas>
+    <canvas id = "rot206"></canvas>
+    <canvas id = "rot207"></canvas>
+    <canvas id = "rot208"></canvas>
+    <canvas id = "rot209"></canvas>
+    <canvas id = "rot210"></canvas>
+    <canvas id = "rot211"></canvas>
+    <canvas id = "rot212"></canvas>
+    <canvas id = "rot213"></canvas>
+    <canvas id = "rot214"></canvas>
+    <canvas id = "rot215"></canvas>
+    <canvas id = "rot216"></canvas>
+    <canvas id = "rot217"></canvas>
+    <canvas id = "rot218"></canvas>
+    <canvas id = "rot219"></canvas>
+    <canvas id = "rot220"></canvas>
+    <canvas id = "rot221"></canvas>
+    <canvas id = "rot222"></canvas>
+    <canvas id = "rot223"></canvas>
+    <canvas id = "rot224"></canvas>
+    <canvas id = "rot225"></canvas>
+    <canvas id = "rot226"></canvas>
+    <canvas id = "rot227"></canvas>
+    <canvas id = "rot228"></canvas>
+    <canvas id = "rot229"></canvas>
+    <canvas id = "rot230"></canvas>
+    <canvas id = "rot231"></canvas>
+    <canvas id = "rot232"></canvas>
+    <canvas id = "rot233"></canvas>
+    <canvas id = "rot234"></canvas>
+    <canvas id = "rot235"></canvas>
+    <canvas id = "rot236"></canvas>
+    <canvas id = "rot237"></canvas>
+    <canvas id = "rot238"></canvas>
+    <canvas id = "rot239"></canvas>
+    <canvas id = "rot240"></canvas>
+    <canvas id = "rot241"></canvas>
+    <canvas id = "rot242"></canvas>
+    <canvas id = "rot243"></canvas>
+    <canvas id = "rot244"></canvas>
+    <canvas id = "rot245"></canvas>
+    <canvas id = "rot246"></canvas>
+    <canvas id = "rot247"></canvas>
+    <canvas id = "rot248"></canvas>
+    <canvas id = "rot249"></canvas>
+    <canvas id = "rot250"></canvas>
+    <canvas id = "rot251"></canvas>
+    <canvas id = "rot252"></canvas>
+    <canvas id = "rot253"></canvas>
+    <canvas id = "rot254"></canvas>
+    <canvas id = "rot255"></canvas>
+    <canvas id = "rot256"></canvas>
+    <canvas id = "rot257"></canvas>
+    <canvas id = "rot258"></canvas>
+    <canvas id = "rot259"></canvas>
+    <canvas id = "rot260"></canvas>
+    <canvas id = "rot261"></canvas>
+    <canvas id = "rot262"></canvas>
+    <canvas id = "rot263"></canvas>
+    <canvas id = "rot264"></canvas>
+    <canvas id = "rot265"></canvas>
+    <canvas id = "rot266"></canvas>
+    <canvas id = "rot267"></canvas>
+    <canvas id = "rot268"></canvas>
+    <canvas id = "rot269"></canvas>
+    <canvas id = "rot270"></canvas>
+    <canvas id = "rot271"></canvas>
+    <canvas id = "rot272"></canvas>
+    <canvas id = "rot273"></canvas>
+    <canvas id = "rot274"></canvas>
+    <canvas id = "rot275"></canvas>
+    <canvas id = "rot276"></canvas>
+    <canvas id = "rot277"></canvas>
+    <canvas id = "rot278"></canvas>
+    <canvas id = "rot279"></canvas>
+    <canvas id = "rot280"></canvas>
+    <canvas id = "rot281"></canvas>
+    <canvas id = "rot282"></canvas>
+    <canvas id = "rot283"></canvas>
+    <canvas id = "rot284"></canvas>
+    <canvas id = "rot285"></canvas>
+    <canvas id = "rot286"></canvas>
+    <canvas id = "rot287"></canvas>
+    <canvas id = "rot288"></canvas>
+    <canvas id = "rot289"></canvas>
+    <canvas id = "rot290"></canvas>
+    <canvas id = "rot291"></canvas>
+    <canvas id = "rot292"></canvas>
+    <canvas id = "rot293"></canvas>
+    <canvas id = "rot294"></canvas>
+    <canvas id = "rot295"></canvas>
+    <canvas id = "rot296"></canvas>
+    <canvas id = "rot297"></canvas>
+    <canvas id = "rot298"></canvas>
+    <canvas id = "rot299"></canvas>
+    <canvas id = "rot300"></canvas>
+    <canvas id = "rot301"></canvas>
+    <canvas id = "rot302"></canvas>
+    <canvas id = "rot303"></canvas>
+    <canvas id = "rot304"></canvas>
+    <canvas id = "rot305"></canvas>
+    <canvas id = "rot306"></canvas>
+    <canvas id = "rot307"></canvas>
+    <canvas id = "rot308"></canvas>
+    <canvas id = "rot309"></canvas>
+    <canvas id = "rot310"></canvas>
+    <canvas id = "rot311"></canvas>
+    <canvas id = "rot312"></canvas>
+    <canvas id = "rot313"></canvas>
+    <canvas id = "rot314"></canvas>
+    <canvas id = "rot315"></canvas>
+    <canvas id = "rot316"></canvas>
+    <canvas id = "rot317"></canvas>
+    <canvas id = "rot318"></canvas>
+    <canvas id = "rot319"></canvas>
+    <canvas id = "rot320"></canvas>
+    <canvas id = "rot321"></canvas>
+    <canvas id = "rot322"></canvas>
+    <canvas id = "rot323"></canvas>
+    <canvas id = "rot324"></canvas>
+    <canvas id = "rot325"></canvas>
+    <canvas id = "rot326"></canvas>
+    <canvas id = "rot327"></canvas>
+    <canvas id = "rot328"></canvas>
+    <canvas id = "rot329"></canvas>
+    <canvas id = "rot330"></canvas>
+    <canvas id = "rot331"></canvas>
+    <canvas id = "rot332"></canvas>
+    <canvas id = "rot333"></canvas>
+    <canvas id = "rot334"></canvas>
+    <canvas id = "rot335"></canvas>
+    <canvas id = "rot336"></canvas>
+    <canvas id = "rot337"></canvas>
+    <canvas id = "rot338"></canvas>
+    <canvas id = "rot339"></canvas>
+    <canvas id = "rot340"></canvas>
+    <canvas id = "rot341"></canvas>
+    <canvas id = "rot342"></canvas>
+    <canvas id = "rot343"></canvas>
+    <canvas id = "rot344"></canvas>
+    <canvas id = "rot345"></canvas>
+    <canvas id = "rot346"></canvas>
+    <canvas id = "rot347"></canvas>
+    <canvas id = "rot348"></canvas>
+    <canvas id = "rot349"></canvas>
+    <canvas id = "rot350"></canvas>
+    <canvas id = "rot351"></canvas>
+    <canvas id = "rot352"></canvas>
+    <canvas id = "rot353"></canvas>
+    <canvas id = "rot354"></canvas>
+    <canvas id = "rot355"></canvas>
+    <canvas id = "rot356"></canvas>
+    <canvas id = "rot357"></canvas>
+    <canvas id = "rot358"></canvas>
+    <canvas id = "rot359"></canvas>
+  </div>
+  <input type = "range" min = "0" max = "359" value = "0" class = "rearrange-slider slider"></input>
+  <script>
+    var rotation = 0;
+    var speed = 1;
+    var pos = { x: 0, y: 0 };
+    var transparencyVar = false;
+    var drawVar = true;
+    var originVar = false;
+    var rearrangeVar = false;
+    var timestamp = null;
+    var lastMouseX = 0;
+    var modal = document.getElementById("particle-modal");
+    var background = document.getElementById("background-modal");
+
+    // particles
+    // rearange
+    // paintbrushes
+    // resize canvas
+    // perspective
+    // help
+    // text
+    // animate
+    // sphere and other shapes
+    // New Drawing Title
+    // background
+    // share
+    // light system
+    // precision
+
+    document.getElementsByClassName("background")[0].onclick = function() {
+      background.style.display = "block";
+      drawVar = false;
+    }
+    document.getElementsByClassName("particles")[0].onclick = function() {
+      modal.style.display = "block";
+      drawVar = false;
+    }
+    document.getElementsByClassName("close")[0].onclick = function() {
+      modal.style.display = "none";
+      drawVar = true;
+    }
+    document.getElementsByClassName("close")[1].onclick = function() {
+      background.style.display = "none";
+      drawVar = true;
+    }
+    document.getElementsByClassName("save")[0].onclick = function() {
+      modal.style.display = "none";
+      drawVar = true;
+      renderParticles();
+    }
+    document.getElementsByClassName("save-background")[0].onclick = function() {
+      background.style.display = "none";
+      drawVar = true;
+    }
+    window.onclick = function(e) {
+      if (e.target == modal || e.target == background) {
+        modal.style.display = "none";
+        background.style.display = "none";
+        drawVar = true;
+      }
+    }
+
+    function rearrange() {
+      var slider = document.getElementsByClassName("rearrange-slider")[0];
+      if (rearrangeVar == true) {
+        slider.style.display = "none";
+        rearrangeVar = false;
+        speed = 1;
+      }
+      else if (rearrangeVar == false) {
+        slider.style.display = "block";
+        speed = 0;
+        for (var i = 0; i <= 359; i++) {
+          var canvas = document.getElementById("rot" + i);
+          canvas.style.transform = "rotateY(180deg)";
+        }
+        rearrangeVar = true;
+      }
+    }
+
+    function refreshPreview() {
+      var canvas = document.getElementById("preview");
+      var ctx = canvas.getContext("2d");
+      var origin = document.getElementById("origin").value;
+      var size = document.getElementById("size").value;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.fillStyle = document.getElementById("color").value;
+      ctx.lineCap = "round";
+      ctx.arc(100, origin, size, 0, 2*Math.PI);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function renderParticles() {
+      for (var i = 0; i <= 359; i++) {
+        var canvas = document.getElementById("rot" + i);
+        if (canvas.style.transform.includes("rotateY(180deg)")) {
+          break;
+        }
+      }
+      var origin = document.getElementById("origin").value;
+      var length = document.getElementById("length").value;
+      var size = document.getElementById("size").value;
+      var spread = document.getElementById("spread").value;
+      var distribution = document.getElementById("distribution").value;
+      var gravity = document.getElementById("gravity").value;
+      var color = document.getElementById("color").value;
+      var ctx = canvas.getContext("2d");
+      var posX = length, spread = canvas.height/2;
+      var particles = {}, particleIndex = 0, settings = { density: distribution/5, particleSize: size, startingX: canvas.width/2, startingY: canvas.height-origin, gravity: gravity/50 };
+      function Particle() {
+        this.x = settings.startingX;
+        this.y = settings.startingY;
+        this.vx = Math.random()*20-10;
+        this.vy = Math.random()*20-5;
+        particleIndex++;
+        particles[particleIndex] = this;
+        this.id = particleIndex;
+        this.life = 0;
+        this.maxLife = 100;
+      }
+      Particle.prototype.draw = function() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += settings.gravity;
+        this.life++;
+        if (this.life >= this.maxLife) {
+          delete particles[this.id];
+        }
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.arc(this.x, this.y, settings.particleSize, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fill();
+      };
+      setInterval(function() {
+        for (var i = 0; i < settings.density; i++) {
+          if (Math.random() > 0.97) {
+            new Particle();
+          }
+        }
+        for (var i in particles) {
+          ctx.clearRect(particles[i].x-settings.particleSize-1, particles[i].y-settings.particleSize-1, settings.particleSize*2+2, settings.particleSize*2+2);
+          particles[i].draw();
+        }
+      }, spread);
+    }
+
+    function drawVarChange() {
+      if (drawVar == true) {
+        drawVar = false;
+      }
+      else if (drawVar == false) {
+        drawVar = true;
+      }
+    }
+
+    function transparency() {
+      if (transparencyVar == true) {
+        transparencyVar = false;
+      }
+      else if (transparencyVar == false) {
+        transparencyVar = true;
+      }
+    }
+
+    function setOrigin() {
+      speed = 0;
+      drawVar = false;
+      var canvases = document.getElementsByClassName("canvas")[0]
+      canvases.style.cursor = "pointer";
+      document.addEventListener("click", function(e) { originVarChange(e) });
+      setTimeout(() => { originVar = true; }, 100);
+    }
+
+    function originVarChange(e) {
+      if (originVar == true) {
+        speed = 1;
+        drawVar = true;
+        document.getElementsByClassName("canvas")[0].style.cursor = "initial";
+        for (var i = 0; i <= 359; i++) {
+          var canvas = document.getElementById("rot" + i);
+          if (canvas.style.transform.includes("rotateY(180deg)")) {
+            var rect = canvas.getBoundingClientRect();
+          }
+        }
+        for (var i = 0; i <= 359; i++) {
+          var canvas = document.getElementById("rot" + i);
+          canvas.style.transformOrigin = Math.round(e.clientX/rect.width*100) + "%";
+        }
+        originVar = false;
+      }
+    }
+
+    function hexToRGBA(hex) {
+      var hex = hex.replace("#", "");
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+      return "rgba(" + r + ", " + g + ", " + b + ", 0.1)";
+    }
+
+    for (var i = 0; i <= 359; i++) {
+      var canvas = document.getElementById("rot" + i);
+      canvas.width = window.innerWidth;
+      canvas.height = 500;
+    }
+    setInterval("update()", 100);
+    document.addEventListener("mouseenter", position);
+    document.addEventListener("mousedown", position);
+    document.addEventListener("mousemove", function(e) {
+      if (e.buttons !== 4) return draw(e);
+      if (timestamp === null) {
+        timestamp = Date.now();
+        lastMouseX = e.screenX;
+        return;
+      }
+      var now = Date.now();
+      var dt =  now - timestamp;
+      var dx = e.screenX - lastMouseX;
+      var speedX = Math.round(dx/dt*100);
+      speed = speedX/5;
+      timestamp = now;
+      lastMouseX = e.screenX;
+      draw(e)
+    });
+
+    function update() {
+      rotation += Math.round(speed);
+      if (rotation >= 360) {
+        rotation = 0;
+      }
+      for (var i = 0; i <= 359; i++) {
+        if (speed !== 0) {
+          var canvas = document.getElementById("rot" + i);
+          var ctx = canvas.getContext("2d");
+          canvas.style.transform = "rotateY(" + (i - 180 + rotation) + "deg)";
+        }
+      }
+      document.getElementsByClassName("selection")[0].style.backgroundColor = document.getElementById("selection").value;
+    }
+
+    function position(e) {
+      for (var i = 0; i <= 359; i++) {
+        var canvas = document.getElementById("rot" + i);
+        if (canvas.style.transform.includes("rotateY(180deg)")) {
+          var rect = canvas.getBoundingClientRect();
+        }
+      }
+      pos.x = (window.innerWidth - e.clientX + rect.left);
+      pos.y = (e.clientY - rect.top);
+    }
+
+    function draw(e) {
+      for (var i = 0; i <= 359; i++) {
+        var canvas = document.getElementById("rot" + i);
+        if (canvas.style.transform.includes("rotateY(180deg)")) {
+          var ctx = canvas.getContext("2d");
+        }
+      }
+      if (rearrangeVar == true) {
+        var canvas = document.getElementById("rot" + document.getElementsByClassName("rearrange-slider")[0].value);
+        var ctx = canvas.getContext("2d");
+      }
+      if (e.buttons !== 1) return;
+      ctx.beginPath();
+      ctx.lineWidth = document.getElementById("thickness").value;
+      ctx.lineCap = "round";
+      if (document.getElementsByClassName("selection_radio")[0].checked == true) {
+        ctx.strokeStyle = document.getElementById("selection").value;
+        if (transparencyVar == true) {
+          ctx.strokeStyle = hexToRGBA(document.getElementById("selection").value);
+        }
+      }
+      else {
+        var radios = document.getElementsByName("colors")
+        for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            ctx.strokeStyle = radios[i].value;
+            if (transparencyVar == true) {
+              ctx.strokeStyle = hexToRGBA({"black": "#000000", "blue": "#0000ff", "green": "#008000", "orange": "#ffa500", "purple": "#800080", "red": "#ff0000", "white": "#ffffff", "yellow": "#ffff00"}[radios[i].value]);
+            }
+          }
+        }
+      }
+      if (drawVar == true) {
+        ctx.moveTo(pos.x, pos.y);
+        position(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      }
+    }
+  </script>
+</body>
+</html>
