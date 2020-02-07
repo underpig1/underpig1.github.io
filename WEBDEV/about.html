@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href = "https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel = "stylesheet">
+    <title>WEBDEV | About</title>
+    <style>
+      * { box-sizing: border-box; }
+
+      body, html {
+        margin: 0;
+        scroll-behavior: smooth;
+        font-family: "Montserrat";
+      }
+
+      .hero {
+        background-image: url("https://vectr.com/tmp/bkvWjnbAx/b3wZvn0zGt.svg?width=640&height=640&select=b3wZvn0zGtpage0");
+        position: relative;
+        height: 100vh;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .hero-text {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #333;
+      }
+
+      .fade {
+        animation-name: fade;
+        animation-duration: 1s;
+        animation-delay: 0.5s;
+        animation-fill-mode: forwards;
+        opacity: 0;
+      }
+
+      header {
+        position: fixed;
+        background: white;
+        width: 100%;
+        z-index: 1;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      ul {
+        list-style-type: none;
+        display: flex;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #333;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      #header {
+        top: 0;
+        transition: top 0.2s;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(200%);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+
+      @media only screen and (max-width: 600px) {
+        .column {
+          width: 90%;
+        }
+
+        .pricing {
+          display: grid;
+          justify-content: normal;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id = "header">
+      <nav>
+        <ul>
+          <li><a href = "web.html"><h1 style = "font-weight: lighter;">WEB<span style = "font-weight: bold;">DEV</span></h1></a></li>
+          <li><a href = "web.html">Home</a></li>
+          <li><a href = "pricing.html">Pricing</a></li>
+          <li><a href = "contact.html">Contact</a></li>
+          <li><a href = "about.html">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div>
+      <div class = "hero">
+        <div class = "hero-text">
+          <h1 style = "font-weight: lighter; animation: fade 1s;">WEB<span style = "font-weight: bold;">DEV</span></h1>
+          <p class = "fade">Website Development</p>
+        </div>
+      </div>
+    </div>
+    <div class = "faq" style = "text-align: center;">
+      <h1 style = "font-weight: lighter; animation: fade 1s;">FA<span style = "font-weight: bold;">Q</span></h1>
+      <p class = "fade">Frequently-Asked Questions</p>
+    </div>
+    <div style = "margin-left: 10%;">
+      <div style = "padding: 10vh; max-width: 120vh;">
+        <h3 style = "font-weight: lighter;">How do I request a <span style = "font-weight: bold;">website</span>?</h3>
+        <p style = "margin: 0 0 4vh 2vh;">Go to the <a href = "contact.html">Contact</a> page and fill out the necessary information. Press submit, and you will be emailed shortly on the status of your website!</p>
+        <h3 style = "font-weight: lighter;">When do I have to <span style = "font-weight: bold;">pay</span>?</h3>
+        <p style = "margin: 0 0 4vh 2vh;">You won't have to pay until you are sent a preview of the website. Then, if you like it, you will be sent billing information along with the completed website. If you don't want it, you won't be charged.</p>
+        <h3 style = "font-weight: lighter;">What should I include in my <span style = "font-weight: bold;">request</span>?</h3>
+        <p style = "margin: 0 0 4vh 2vh;">Include your name (optional), email (for contact purposes), the type of your website, and a detailed description of your website. Include links to images, layout diagrams, text to use in your website, and any other resources you would like to provide. If you are unsure about your design choices, give a vague description and we will create it for you.</p>
+        <h3 style = "font-weight: lighter;">What are <span style = "font-weight: bold;">Promo Codes</span> and how do I get one?</h3>
+        <p style = "margin: 0 0 4vh 2vh;">Promo Codes can give you excellent deals on your website fees, such as one page without charge. You can get a Promo Code by signing up to recieve offers when you submit your request.</p>
+        <h3 style = "font-weight: lighter;">What do I do once I recieve my <span style = "font-weight: bold;">website</span>?</h3>
+        <p style = "margin: 0 0 4vh 2vh;">Your website will be sent to you as an HTML file. You can preview it by dragging the file into your browser, and once you have ownership of a domain, you can use the file for your website through hosting services.</p>
+      </div>
+    </div>
+    <footer>
+      <nav>
+        <ul>
+          <li><a href = "#"><h1 style = "font-weight: lighter;">WEB<span style = "font-weight: bold;">DEV</span></h1></a></li>
+          <li><a href = "https://github.com/underpig1"><h1 style = "font-weight: lighter; font-size: 1.5vh;">Created by underpig</h1></a></li>
+        </ul>
+      </nav>
+    </footer>
+    <script>
+      var prevScroll = window.pageYOffset;
+      window.onscroll = function() {
+        var currentScroll = window.pageYOffset;
+        if (prevScroll > currentScroll) {
+          document.getElementById("header").style.top = "0";
+        } else {
+          document.getElementById("header").style.top = "-100px";
+        }
+        prevScroll = currentScroll;
+      }
+    </script>
+  </body>
+<html>

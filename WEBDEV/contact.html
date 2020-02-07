@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href = "https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel = "stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
+    <script type="text/javascript"> (function(){ emailjs.init("user_tMu38zPxs4s9UZh1snkJ1"); })(); </script>
+    <title>WEBDEV | Contact</title>
+    <style>
+      * { box-sizing: border-box; }
+
+      body, html {
+        margin: 0;
+        scroll-behavior: smooth;
+        font-family: "Montserrat";
+      }
+
+      .hero {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://picsum.photos/id/974/2000");
+        position: relative;
+        height: 75vh;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 450vh 450vh;
+        transition: background-size 0.5s;
+      }
+
+      .hero:hover .hero-text {
+        opacity: 0.5;
+      }
+
+      .hero:hover {
+        background-size: 500vh 500vh;
+      }
+
+      .hero-text {
+        font-family: Courier;
+        text-align: center;
+        position: absolute;
+        opacity: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        transition: opacity 0.5s;
+      }
+
+      .fade {
+        animation-name: fade;
+        animation-duration: 1s;
+        animation-delay: 1s;
+        animation-fill-mode: forwards;
+        opacity: 0;
+      }
+
+      p {
+        font-family: Courier;
+      }
+
+      header {
+        position: fixed;
+        background: white;
+        width: 100%;
+        z-index: 1;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .contact {
+        padding: 2vh;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100vh;
+      }
+
+      input[type=text], textarea[name=description] {
+        display: inline-block;
+        width: 100%;
+        padding: 12px 2vh;
+        margin: 2vh 0;
+        border: 1px solid lightgray;
+      }
+
+      input[type=password] {
+        display: inline-block;
+        padding: 12px 2vh;
+        margin: 2vh 0;
+        border: 1px solid lightgray;
+      }
+
+      button[type=submit] {
+        display: inline-block;
+        width: 100%;
+        padding: 2vh;
+        margin: 2vh 0;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        height: 20vh;
+      }
+
+      .help {
+        position: relative;
+        display: inline-block;
+        width: 4vh;
+        height: 4vh;
+        margin: 2vh;
+        top: 2.5vh;
+        cursor: pointer;
+        font-size: 2vh;
+        border-radius: 50%;
+        text-align: center;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .help p {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .tooltip {
+        position: absolute;
+        visibility: hidden;
+        min-width: 20vh;
+        background: black;
+        color: white;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        top: -5px;
+        left: 120%;
+        opacity: 0;
+        transform: translateX(1vh);
+        transition: transform 0.5s, opacity 0.5s;
+      }
+
+      .help:hover .tooltip {
+        visibility: visible;
+        opacity: 0.5;
+        transform: translateX(0);
+      }
+
+      ul {
+        list-style-type: none;
+        display: flex;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #333;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      button {
+        margin: 5vh;
+        width: 20vh;
+        height: 6vh;
+        text-align: center;
+        background: white;
+        cursor: pointer;
+        transform: scale(1);
+        transition: transform 0.5s;
+      }
+
+      button:hover {
+        transform: scale(0.95);
+      }
+
+      #header {
+        top: 0;
+        transition: top 0.2s;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(200%);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id = "header">
+      <nav>
+        <ul>
+          <li><a href = "web.html"><h1 style = "font-weight: lighter;">WEB<span style = "font-weight: bold;">DEV</span></h1></a></li>
+          <li><a href = "web.html">Home</a></li>
+          <li><a href = "pricing.html">Pricing</a></li>
+          <li><a href = "contact.html">Contact</a></li>
+          <li><a href = "about.html">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div>
+      <div class = "hero">
+        <div class = "hero-text">
+          <h1 id = "type"></h1>
+          <p class = "fade">get your website</p>
+        </div>
+      </div>
+    </div>
+    <div style = "display: grid; justify-content: center;">
+      <div class = "contact">
+        <h1 style = "font-weight: lighter;">CONTACT<span class = "help"><p>?</p><span style = "font-size: 1.5vh;" class = "tooltip">Include a brief description of the purpose of your website, links to any and all files such as images or layout design necessary to create the website, text, titles, and a comprehensive description of the layout. You will be emailed shortly with the status of your website, and within a week to a month (see pricing) your website will be ready for launch and you will be emailed with pricing information.</span></span></h1>
+        <form>
+          <label for = "name">Name: </label><input id = "name" type = "text" placeholder = "Name" name = "name" />
+          <label for = "email">Email: </label><input id = "email" type = "text" placeholder = "Email Address" name = "email" required />
+          <label for = "type">Website Type: </label>
+          <select id = "select">
+            <option value = "Standard">Standard Website</option>
+            <option value = "Portfolio">Portfolio</option>
+            <option value = "Article">Article</option>
+            <option value = "Personal">Personal</option>
+            <option value = "Business">Business</option>
+            <option value = "Commerce">Commerce</option>
+            <option value = "Landing">Landing</option>
+            <option value = "Organization">Organization</option>
+            <option value = "Application">Web Application</option>
+          </select>
+          <h1></h1>
+          <label for = "description">Description: </label><textarea id = "description" type = "text" name = "description" required></textarea>
+          <label for = "promo">Promo Code: </label><input id = "promo" type = "password" placeholder = "Promo Code" name = "promo" minlength = "6" />
+          <h1></h1>
+          <input id = "promotion" type = "checkbox" name = "promotion">I would like to be eligible for promotional offers</input>
+          <p>none of your personal information will be publicized</p>
+          <button type = "submit" id = "submit" onclick = "sendRequest(); return false;">Submit</button>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <nav>
+        <ul>
+          <li><a href = "#"><h1 style = "font-weight: lighter;">WEB<span style = "font-weight: bold;">DEV</span></h1></a></li>
+          <li><a href = "https://github.com/underpig1"><h1 style = "font-weight: lighter; font-size: 1.5vh;">Created by underpig</h1></a></li>
+        </ul>
+      </nav>
+    </footer>
+    <script>
+      var i = 0;
+      var text = "contact";
+
+      type();
+
+      function type() {
+        if (i < text.length) {
+          document.getElementById("type").innerHTML += text.charAt(i);
+          if (text.charAt(i + 1) == " ") {
+            document.getElementById("type").innerHTML += " ";
+            i++;
+          }
+          i++;
+          setTimeout(type, 100);
+        }
+      }
+
+
+      function sendRequest() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var type = document.getElementById("select").value;
+        var description = document.getElementById("description").value;
+        var promo = document.getElementById("promo").value;
+        var promotion = document.getElementById("promotion").value;
+        send(name, email, "\nWebsite Type: " + type + "\nDescription: " + description + "\nPromo Code: " + promo + "\nPromotional Offers: " + promotion);
+      }
+
+      function send(name, email, message) {
+        var templateParams = {
+          from_name: name,
+          from_email: email,
+          message: message
+        };
+        emailjs.send("gmail", "template_9pQaLuUp", templateParams).then(function(response) {
+          console.log(response.status, response.text);
+        }, function(error) {
+          console.log(error);
+        });
+      }
+
+      var prevScroll = window.pageYOffset;
+      window.onscroll = function() {
+        var currentScroll = window.pageYOffset;
+        if (prevScroll > currentScroll) {
+          document.getElementById("header").style.top = "0";
+        } else {
+          document.getElementById("header").style.top = "-100px";
+        }
+        prevScroll = currentScroll;
+      }
+    </script>
+  </body>
+<html>
