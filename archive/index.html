@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang = "en">
+<head>
+  <meta charset = "utf-8">
+  <meta name = "description" content = "Website">
+  <meta name = "viewport" content = "width = device-width, initial-scale = 1">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+  <title>Tazzil</title>
+  <style>
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 5vh;
+    font-family: "Comfortaa";
+    display: grid;
+    text-align: center;
+    align-content: center;
+    animation: fadeinDown 1s cubic-bezier(.5,1,.5,1) forwards;
+  }
+
+  .hero {
+    display: grid;
+    font-size: 5em;
+    color: white;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(pink, purple);
+    background-size: 150% 150%;
+    animation: fadeinDown 2s;
+    animation: gradient 10s ease infinite;
+  }
+
+  .site-nav {
+    margin: 3vh;
+    animation: fadeinUp 2s;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+    margin: 10px;
+    display: inline-block;
+  }
+
+  a:hover {
+    animation: moveUp 1s;
+    color: gray;
+  }
+
+  .logo {
+    font-size: 5vh;
+    animation: fadeinDown 2s;
+  }
+
+  section {
+    min-height: 50vh;
+    border-radius: 10px;
+    margin: 3vh auto;
+    float: left;
+    width: 50%;
+  }
+
+  .section1 {
+    background-color: lightblue;
+    position: relative;
+    text-align: left bottom;
+    max-height: 50vh;
+    align-items: center;
+    animation: fadeinUp 2s;
+    background-image: url("https://picsum.photos/200/200/?blur");
+    background-position: cover;
+    background-size: cover;
+  }
+
+  .section2 {
+    background-color: lightgreen;
+    animation: fadeinDown 2s;
+    text-align: center;
+    overflow: hidden;
+    background-image: url("https://picsum.photos/200/200");
+    background-position: center center;
+    background-repeat: round repeat;
+    background-image: url("https://picsum.photos/200/200/?blur");
+    background-position: cover;
+    background-size: cover;
+  }
+
+  .section3 {
+    background-color: lightyellow;
+    animation: fadeinUp 2s;
+    overflow: hidden;
+    display: grid;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-footer {
+    margin: 3vh;
+    padding: 3vh;
+    border-top: 1px solid lightgray;
+  }
+
+  .section1 .creations-img {
+    display: grid;
+    align-content: right;
+    padding: 20px;
+  }
+
+  .section1 h3 {
+    font-size: 5vh;
+    background-color: white;
+    min-width: 30vh;
+    min-height: 5vh;
+    padding: 3vh;
+  }
+
+  .section1 .creations {
+    margin: 10px;
+    border: 5px solid white;
+    border-radius: 50%;
+    padding: 10px;
+    width: 15vh;
+    height: 15vh;
+    color: white;
+    z-index: 1;
+    background-image: url("https://picsum.photos/200/200/");
+    background-position: cover;
+    background-size: cover;
+  }
+
+  @media screen and (max-width: 1000vh) {
+      section {
+        width: 100%;
+      }
+  }
+
+  @keyframes fadeinDown {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeinUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes moveUp {
+    from {
+      transform: translateY(0px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(-10px);
+    }
+  }
+
+  .sections:after {
+    content = "";
+    display: table;
+    clear: both;
+  }
+
+  .section2 h3 {
+    font-size: 5vh;
+    background-color: white;
+    min-width: 30vh;
+    min-height: 5vh;
+    padding: 3vh;
+  }
+
+  .section2 img {
+    margin: 10px;
+    border: 5px solid white;
+    border-radius: 50%;
+    padding: 10px;
+    width: 15vh;
+    height: 15vh;
+    color: white;
+    z-index: 1;
+    background-image: url("https://picsum.photos/200/200/");
+    background-position: cover;
+    background-size: cover;
+  }
+
+  @keyframes scaleImg {
+    from {
+      transform: scale(100%);
+    }
+    to {
+      transform: scale(150%);
+    }
+  }
+
+  .face {
+    height: 20vh;
+    width: 20vh;
+    border-radius: 25%;
+    display: inline-block;
+    background-color: gray;
+    margin: 5vh;
+    animation: faces 5s infinite;
+    background-image: url("https://picsum.photos/200/200/");
+    border: 5px solid white;
+  }
+
+  .quote {
+    font-size: 3vh;
+    background-color: white;
+    text-align: center;
+    animation: quotes 5s infinite;
+  }
+
+  @keyframes faces {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(75vh);
+    }
+    50.1% {
+      transform: translateX(-40vh);
+    }
+    75% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes quotes {
+    3% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(75vh);
+    }
+    50.1% {
+      transform: translateX(-40vh);
+    }
+    72% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 50% 0%;
+    }
+
+    50% {
+      background-position: 50% 100%;
+    }
+
+    100% {
+      background-position: 50% 0%;
+    }
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <a href = "site.html" class = "logo">
+      <img class="logo-small" src="img/logo-small.svg" alt="Tazzil Logo" style="width: 6vh; height: auto;">
+    </a>
+    <div class = "site-nav">
+      <a href = "site.html">Home</a>
+      <a href = "#">Creations</a>
+      <a href = "#">Origins</a>
+      <a href = "products.html">Products</a>
+    </div>
+  </header>
+  <div class = "sections">
+    <section class = "hero">
+      <img class="logo-full" src="img/logo-full-white.svg" alt="Tazzil" style="width: 50vh; height: auto; display: block; margin: auto">
+    </section>
+    <section class = "section1">
+          <h3>Creations</h3>
+          <a href = "#"><img class = "creations" src= "https://picsum.photos/150/150" alt = "Random Image"></a>
+    </section>
+    <section class = "section2">
+      <h3>Origins</h3>
+      <a href = "#"><img src= "https://picsum.photos/300/400" alt = "Random Image"></a>
+    </section>
+    <section class = "section3" id = "scroll">
+      <span class = "face"></span>
+      <p class = "quote"><i>"Quote!"</i></p>
+    </section>
+  </div>
+  <footer>
+    <div class = "nav-footer">
+      <a href = "site.html">Home</a>
+      <a href = "#">Creations</a>
+      <a href = "#">Origins</a>
+      <a href = "products.html">Products</a>
+    </div>
+  </footer>
+</body>
+</html>
